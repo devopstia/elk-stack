@@ -34,8 +34,6 @@ services:
       KAFKA_ALLOW_EVERYONE_IF_NO_ACL_FOUND: "true"
     depends_on:
       - zookeeper1
-      - zookeeper2
-      - zookeeper3
 
   kafka-manager:
     image: sheepkiller/kafka-manager:latest
@@ -51,8 +49,6 @@ services:
       KM_PASSWORD: "admin123" # Set password
     depends_on:
       - zookeeper1
-      - zookeeper2
-      - zookeeper3
 
 networks:
   monitoring:

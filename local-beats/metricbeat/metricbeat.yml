@@ -1,0 +1,32 @@
+name: elasticserch-kibana
+
+metricbeat.config.modules:
+  path: ${path.config}/modules.d/*.yml
+  reload.enabled: true
+  reload.period: 10s
+
+setup.template.settings:
+  index.number_of_shards: 1
+  index.codec: best_compression
+
+setup.kibana:
+  host: "https://kibana:5601" 
+setup.dashboards.enabled: true
+
+output.elasticsearch:
+  hosts: ["https://es01:9200"]
+  preset: balanced
+  protocol: "https"
+  username: "elastic"
+  password: "lm72k9a84b8j7xkk"
+  ssl.verification_mode: "none"
+
+processors:
+  - add_docker_metadata:
+      host: "unix:///var/run/docker.sock"
+
+processors:
+  - add_host_metadata: ~
+  - add_cloud_metadata: ~
+  - add_docker_metadata: ~
+  - add_kubernetes_metadata: ~

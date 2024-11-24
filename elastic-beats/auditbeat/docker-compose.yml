@@ -1,0 +1,30 @@
+version: "3.8"
+
+services:
+  auditbeat:
+    image: docker.elastic.co/beats/auditbeat:8.1.0
+    container_name: "auditbeat"
+    user: root
+    pid: host
+    privileged: true # Full privileges
+    cap_add:
+      - AUDIT_CONTROL
+      - AUDIT_WRITE
+      - SYS_ADMIN
+      - SYS_PTRACE
+      - NET_ADMIN
+    security_opt:
+      - apparmor:unconfined #
+    volumes:
+      - auditbeat:/usr/share/auditbeat/data
+      - /var/log:/var/log:ro
+      - ./auditbeat.yml:/usr/share/auditbeat/auditbeat.yml:ro
+      - /var/log/auditbeat:/var/log/auditbeat
+      # - ./modules.d:/usr/share/auditbeat/modules.d:ro 
+    command: >
+      sh -c "auditbeat setup && auditbeat -e -strict.perms=false"
+    environment:
+      - ELASTICSEARCH_USERNAME=elastic
+      - ELASTICSEARCH_PASSWORD=onw06_8uvZjvZWpotiGk
+volumes:
+  auditbeat:

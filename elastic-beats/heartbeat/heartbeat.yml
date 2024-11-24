@@ -1,0 +1,44 @@
+heartbeat.config.monitors:
+  path: ${path.config}/monitors.d/*.yml
+  reload.enabled: true
+  reload.period: 5s
+
+heartbeat.monitors:
+- type: http
+  enabled: true
+  id: kibana-monitor
+  name: Kibana Monitor
+  urls: ["http://3.225.236.30:5601/"]
+  schedule: '@every 10s'
+
+- type: http
+  enabled: true
+  id: elasticsearch-monitor
+  name: Elasticsearch Monitor
+  urls: ["https://3.225.236.30:9200"]
+  schedule: '@every 10s'
+
+- type: icmp
+  enabled: true
+  id: ping-elasticsearch
+  name: Ping elasticsearch
+  hosts: ["3.225.236.30"]
+  schedule: '@every 10s'
+
+setup.template.settings:
+  index.number_of_shards: 1
+  index.codec: best_compression
+
+setup.kibana:
+  host: "http://3.225.236.30:5601" 
+
+output.elasticsearch:
+  hosts: ["https://3.225.236.30:9200"]
+  preset: balanced
+  protocol: "https"
+  username: "elastic"
+  password: "onw06_8uvZjvZWpotiGk"
+  ssl.verification_mode: "none"
+
+processors:
+  - add_observer_metadata:

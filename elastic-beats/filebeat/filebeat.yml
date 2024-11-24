@@ -1,0 +1,48 @@
+filebeat.config.modules:
+  path: ${path.config}/modules.d/*.yml
+  reload.enabled: true
+  reload.period: 10s
+
+filebeat.inputs:
+- type: container
+  paths: 
+    - '/var/lib/docker/containers/*/*-json.log'
+
+filebeat.autodiscover:
+  providers:
+    - type: docker
+      hints.enabled: true
+
+processors:
+- add_docker_metadata: 
+    host: "unix:///var/run/docker.sock"
+
+filebeat.modules:
+  - module: system
+    syslog:
+      enabled: true
+      var.paths: ["/var/log/syslog*"]
+  - module: system
+    auth:
+      enabled: true
+      var.paths: ["/var/log/auth.log*"]
+
+setup.dashboards.enabled: true
+
+setup.kibana:
+  host: "http://3.225.236.30:5601" 
+
+output.elasticsearch:
+  hosts: ["https://3.225.236.30:9200"]
+  preset: balanced
+  protocol: "https"
+  username: "elastic"
+  password: "onw06_8uvZjvZWpotiGk"
+  ssl.verification_mode: "none"
+
+processors:
+  - add_host_metadata:
+      when.not.contains.tags: forwarded
+  - add_cloud_metadata: ~
+  - add_docker_metadata: ~
+  - add_kubernetes_metadata: ~

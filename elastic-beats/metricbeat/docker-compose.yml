@@ -1,0 +1,19 @@
+version: "3.8"
+
+services:
+  metricbeat:
+    image: docker.elastic.co/beats/metricbeat:8.1.0
+    container_name: "metricbeat"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /sys/fs/cgroup:/hostfs/sys/fs/cgroup:ro
+      - /proc:/hostfs/proc:ro
+      - /:/hostfs:ro
+      - ./metricbeat.yml:/usr/share/metricbeat/metricbeat.yml:ro
+      - ./modules.d:/usr/share/metricbeat/modules.d:ro
+    command: >
+      sh -c "metricbeat setup && metricbeat -e -strict.perms=false"
+    environment:
+      - ELASTICSEARCH_USERNAME=elastic
+      - ELASTICSEARCH_PASSWORD=onw06_8uvZjvZWpotiGk
+    user: root

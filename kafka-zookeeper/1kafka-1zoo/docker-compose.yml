@@ -12,7 +12,7 @@ services:
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_SERVER_ID: 1
-      ZOOKEEPER_SERVERS: zookeeper1:2888:3888;zookeeper2:2888:3888;zookeeper3:2888:3888
+      ZOOKEEPER_SERVERS: zookeeper1:2888:3888
 
   kafka1:
     image: confluentinc/cp-kafka:${KAFKA_ZOO_VERSION}
